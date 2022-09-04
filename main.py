@@ -1,22 +1,10 @@
 import discord
 import random
 from env import TOKEN
-# API
-import requests
-import json
+from src.quotation import get_quote
+from src.random import sad_words, comfort_word
 
 client = discord.Client()
-
-sad_words = ["sad", "depressed", "unhappy", "angry", "miserable", "depressing"]
-comfort_words = ["Cheer up!", "Hang in there.", "You are a great person!"]
-
-
-# Funkcja pomocnicza do pracy z API
-def get_quote():
-    response = requests.get("https://zenquotes.io/api/random")
-    json_data = json.loads(response.text)
-    quote = json_data[0]['q'] + " ~" + json_data[0]['a']
-    return quote
 
 
 @client.event
@@ -58,7 +46,8 @@ async def on_message(message):
 
     msg = message.content  # message on chat
     if any(word in msg for word in sad_words):
-        await message.channel.send(random.choice(comfort_words))
+        await message.channel.send(comfort_word)
+        return
 
 
 client.run(TOKEN)
